@@ -24,8 +24,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.swing.JFileChooser;
@@ -155,7 +153,7 @@ public class HelloController implements Initializable {
     private Pane pPassword;
 
     @FXML
-    private Pane pPrincipal;
+    private Pane pPrincipal1;
 
     @FXML
     private Pane pPrincipalUsuariosAdmin;
@@ -247,30 +245,25 @@ public class HelloController implements Initializable {
 
     @FXML
     private FlowPane imgPane;
+    @FXML
+    private TextField txfGeneroLibroUser;
+    @FXML
+    private TextField txfAutorLibroUser;
 
     @FXML
-    private TextField lAutorLibro;
+    private TextField txfIdlibroUser;
 
     @FXML
-    private TextField lGeneroLibro;
+    private TextField txfIsbnLibroUser;
+
 
     @FXML
-    private Label lHarcodeLibroAutor;
+    private TextField txfPaginasLibroUser;
+
 
     @FXML
-    private Label lHardCodeLibroTitulo;
+    private TextField txfTituloLibroUser;
 
-    @FXML
-    private TextField lIdlibro;
-
-    @FXML
-    private TextField lIsbnLibro;
-
-    @FXML
-    private TextField lPaginasLibro;
-
-    @FXML
-    private TextField lTituloLibro;
 
 
 
@@ -460,7 +453,7 @@ public class HelloController implements Initializable {
 
         try {
             ObservableList<String>data = tableUsuariosAdmin.getSelectionModel().getSelectedItem();
-            Object value = null;
+            String value = null;
             value = data.get(0);
 
 
@@ -514,7 +507,7 @@ public class HelloController implements Initializable {
         System.out.println("entra");
         try {
             ObservableList<String> data;
-            Object value = null;
+            String value = null;
             data = tableUsuariosAdmin.getSelectionModel().getSelectedItem();
             value = data.get(0);
             System.out.println(value);
@@ -657,7 +650,7 @@ public class HelloController implements Initializable {
             biografia = txfBiografiaAutorAdmin.getText();
 
             ObservableList<String>data =tableAutores.getSelectionModel().getSelectedItem();
-            Object value = null;
+            String value = null;
             value = data.get(0);
 
 
@@ -697,7 +690,7 @@ public class HelloController implements Initializable {
 
         try {
             ObservableList<String> data;
-            Object value = null;
+            String value = null;
             data = tableAutores.getSelectionModel().getSelectedItem();
             value = data.get(0);
             Connection con = conBD();
@@ -844,7 +837,7 @@ public class HelloController implements Initializable {
             InputStream ub = new FileInputStream(enlaceImg);
 
             ObservableList<String>data = tableAutores.getSelectionModel().getSelectedItem();
-            Object value = null;
+            String value = null;
             value = data.get(0);
 
             PreparedStatement encapsulaPSCons = conBD().prepareStatement("update libros set titulo = ?,numPaginas = ?,idAutor = ?,idGenero = ?,isbn = ?,enlaceImg = ?, cantidadLibros = ? where IdLibro = ?");
@@ -881,7 +874,7 @@ public class HelloController implements Initializable {
 
         try {
             ObservableList<String> data;
-            Object value = null;
+            String value = null;
             data = tableLibrosAdmin.getSelectionModel().getSelectedItem();
             value = data.get(0);
             Connection con = conBD();
@@ -972,7 +965,7 @@ public class HelloController implements Initializable {
         }
     }
 
-    public String datosConsultaLibroComboBox(Object value) {
+    public String datosConsultaLibroComboBox(String value) {
         String resultado = null;
         try {
             Statement s = conBD().createStatement();
@@ -992,7 +985,7 @@ public class HelloController implements Initializable {
         return resultado;
     }
 
-    public String datosConsultaLibroComboBox2(Object value) {
+    public String datosConsultaLibroComboBox2(String value) {
         String resultado = null;
         try {
             Statement s = conBD().createStatement();
@@ -1020,7 +1013,7 @@ public class HelloController implements Initializable {
     // Controladores Tablas
 
     private void controllerTableIngresos(ObservableList<String>data) {
-        Object value = null;
+        String value = null;
         value = data.get(0);
         System.out.println(value);
 
@@ -1043,7 +1036,7 @@ public class HelloController implements Initializable {
 
 
     private void controllerTableAutores(ObservableList<String>data) {
-        Object value = null;
+        String value = null;
         value = data.get(0);
         System.out.println(value);
         try {
@@ -1063,7 +1056,7 @@ public class HelloController implements Initializable {
     }
 
     private void controllerTableLibros(ObservableList<String>data) {
-        Object value = null;
+        String value = null;
         value = data.get(0);
         System.out.println(value);
 
@@ -1264,7 +1257,7 @@ public class HelloController implements Initializable {
     @FXML
     void volveraBiblio(ActionEvent event) {
         pCojaLibro.setVisible(false);
-        pPrincipal.setVisible(true);
+        pPrincipal1.setVisible(true);
     }
 
     @FXML
@@ -1314,13 +1307,41 @@ public class HelloController implements Initializable {
 
             while (rs.next()) {
                 //Cogiendo datos
-                int idLibro = rs.getInt(1);
-                String dis = rs.getString(2);
-                InputStream fis = rs.getBinaryStream(3);
+                int idLibro = rs.getInt("idlibro");
+                String dis = rs.getString("titulo");
+                InputStream fis = rs.getBinaryStream("enlaceImg");
 
                 System.out.println(dis);
 
-                Pane pane = getPane(dis, fis);
+
+                //Seteando Imagen
+                Image image = new Image(fis);
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(250);
+                imageView.setFitWidth(170);
+                imageView.setImage(image);
+
+                //Seteando Textos
+                label = new Label(dis);
+                label.setFont(new Font("Lato", 20));
+
+                //Creando VBox
+                GridPane gridPane = new GridPane();
+                Pane pane = new Pane();
+                VBox imagBox = new VBox();
+                VBox tituBox = new VBox();
+                VBox geneVBox = new VBox();
+                imagBox.getChildren().add(imageView);
+                tituBox.getChildren().add(label);
+                geneVBox.getChildren().addAll(imagBox, tituBox);
+                pane.getChildren().add(geneVBox);
+                pane.setPadding(new Insets(20, 20, 20, 20));
+                gridPane.getChildren().add(pane);
+
+                imgPane.getChildren().clear();
+                //Añadiendo a panel
+                imgPane.getChildren().add(gridPane);
+
 
                 //Cambiando a panel informacion
                 muestraDatos(stmt, idLibro, dis, pane);
@@ -1331,41 +1352,6 @@ public class HelloController implements Initializable {
         }
     }
 
-    void panePerfil (){
-
-    }
-
-    private Pane getPane(String dis, InputStream fis) {
-        imgPane.getChildren().clear();
-        //Seteando Imagen
-        Image image = new Image(fis);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(250);
-        imageView.setFitWidth(170);
-        imageView.setImage(image);
-
-        //Seteando Textos
-        label = new Label(dis);
-        label.setFont(new Font("Lato", 20));
-
-        //Creando VBox
-        GridPane gridPane = new GridPane();
-        Pane pane = new Pane();
-        VBox imagBox = new VBox();
-        VBox tituBox = new VBox();
-        VBox geneVBox = new VBox();
-        imagBox.getChildren().add(imageView);
-        tituBox.getChildren().add(label);
-        geneVBox.getChildren().addAll(imagBox, tituBox);
-        pane.getChildren().add(geneVBox);
-        pane.setPadding(new Insets(20, 20, 20, 20));
-        gridPane.getChildren().add(pane);
-
-
-        //Añadiendo a panel
-        imgPane.getChildren().add(gridPane);
-        return pane;
-    }
 
     void insertaImg() {
 
@@ -1422,7 +1408,7 @@ public class HelloController implements Initializable {
     private void muestraDatos(Statement stmt, int idLibro, String dis, Pane pane) {
         //Cambiando a panel informacion
         pane.setOnMouseClicked(e -> {
-            pPrincipal.setVisible(false);
+            pPrincipal1.setVisible(false);
             pCojaLibro.setVisible(true);
             System.out.println(dis);
             System.out.println(idLibro);
@@ -1437,12 +1423,20 @@ public class HelloController implements Initializable {
                     int isbn = st.getInt("isbn");
                     Blob enlaceImg = st.getBlob("enlaceImg");
 
-                    lIdlibro.setText(String.valueOf(idlibro));
-                    lTituloLibro.setText(titulo);
-                    lAutorLibro.setText(String.valueOf(idautor));
-                    lIsbnLibro.setText(String.valueOf(isbn));
-                    lGeneroLibro.setText(String.valueOf(idgenero));
-                    lPaginasLibro.setText(String.valueOf(numPag));
+
+                    txfIdlibroUser.setEditable(false);
+                    txfAutorLibroUser.setEditable(false);
+                    txfTituloLibroUser.setEditable(false);
+                    txfIsbnLibroUser.setEditable(false);
+                    txfGeneroLibroUser.setEditable(false);
+                    txfPaginasLibroUser.setEditable(false);
+
+                    txfIdlibroUser.setText(String.valueOf(idlibro));
+                    txfTituloLibroUser.setText(titulo);
+                    txfAutorLibroUser.setText(String.valueOf(idautor));
+                    txfIsbnLibroUser.setText(String.valueOf(isbn));
+                    txfGeneroLibroUser.setText(String.valueOf(idgenero));
+                    txfPaginasLibroUser.setText(String.valueOf(numPag));
 
                 }
             } catch (SQLException ex) {
