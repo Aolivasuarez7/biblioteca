@@ -47,6 +47,9 @@ public class HelloController implements Initializable {
     private Button btCerrarUsuario;
 
     @FXML
+    private Button btReservarLibroAdmin;
+
+    @FXML
     private Button btCrearUsuario;
 
     @FXML
@@ -155,7 +158,7 @@ public class HelloController implements Initializable {
     private Pane pPassword;
 
     @FXML
-    private Pane pPrincipal;
+    private Pane pPrincipal1;
 
     @FXML
     private Pane pPrincipalUsuariosAdmin;
@@ -227,8 +230,6 @@ public class HelloController implements Initializable {
 
     @FXML
     private Pane pCojaLibro;
-
-
 
     @FXML
     private Button btLibros;
@@ -332,7 +333,6 @@ public class HelloController implements Initializable {
     @FXML
     private ComboBox<String> cbGeneroLibros;
 
-
     @FXML
     private ImageView imgLibro;
 
@@ -341,10 +341,12 @@ public class HelloController implements Initializable {
 
     @FXML
     void CambiaPanel(ActionEvent event) {
-
         if (Objects.equals(txfUsuario.getText(), "Admin") & Objects.equals(passFieldContrase.getText(), "Admin")){
             pPassword.setVisible(false);
             pAdministrador.setVisible(true);
+        }else if (Objects.equals(txfUsuario.getText(), "Usuario") & Objects.equals(passFieldContrase.getText(), "Usuario")){
+            pPrincipal1.setVisible(true);
+            pPassword.setVisible(false);
         }
     }
 
@@ -920,6 +922,11 @@ public class HelloController implements Initializable {
     }
 
 
+    /**
+     * Gestión
+     */
+
+
 
 
     /**
@@ -972,6 +979,8 @@ public class HelloController implements Initializable {
         }
     }
 
+
+    //Introduce  los datos de autor y genero en los combo box a la hora de consultar los datos de un libro
     public String datosConsultaLibroComboBox(Object value) {
         String resultado = null;
         try {
@@ -1040,7 +1049,6 @@ public class HelloController implements Initializable {
             throwables.printStackTrace();
         }
     }
-
 
     private void controllerTableAutores(ObservableList<String>data) {
         Object value = null;
@@ -1264,7 +1272,7 @@ public class HelloController implements Initializable {
     @FXML
     void volveraBiblio(ActionEvent event) {
         pCojaLibro.setVisible(false);
-        pPrincipal.setVisible(true);
+        pPrincipal1.setVisible(true);
     }
 
     @FXML
@@ -1293,7 +1301,7 @@ public class HelloController implements Initializable {
 
     public static Connection conBD() throws ClassNotFoundException, SQLException {
         Class.forName("org.mariadb.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "root");
+        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "Root");
     }
 
 
@@ -1422,7 +1430,6 @@ public class HelloController implements Initializable {
     private void muestraDatos(Statement stmt, int idLibro, String dis, Pane pane) {
         //Cambiando a panel informacion
         pane.setOnMouseClicked(e -> {
-            pPrincipal.setVisible(false);
             pCojaLibro.setVisible(true);
             System.out.println(dis);
             System.out.println(idLibro);
