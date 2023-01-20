@@ -27,7 +27,7 @@
             <Image url="@img/libreria-para-empresas.jpg" />
          </image>
       </ImageView>
-      <Pane fx:id="pPassword" layoutX="322.0" layoutY="258.0" prefHeight="203.0" prefWidth="420.0" style="-fx-background-color: #d3d3d3; -fx-border-width: 5px 5px 5px 5px;" visible="false">
+      <Pane fx:id="pPassword" layoutX="322.0" layoutY="258.0" prefHeight="203.0" prefWidth="420.0" style="-fx-background-color: #d3d3d3; -fx-border-width: 5px 5px 5px 5px;">
          <children>
             <TextField fx:id="txfUsuario" layoutX="181.0" layoutY="45.0" prefHeight="32.0" prefWidth="198.0" />
             <PasswordField fx:id="passFieldContrase" layoutX="181.0" layoutY="105.0" prefHeight="32.0" prefWidth="198.0" />
@@ -44,33 +44,6 @@
             <Button fx:id="btAceptar" layoutX="173.0" layoutY="157.0" mnemonicParsing="false" onAction="#CambiaPanel" prefHeight="32.0" prefWidth="74.0" text="Aceptar" />
          </children>
       </Pane>
-      <Pane fx:id="pPrincipal" layoutX="37.0" layoutY="31.0" prefHeight="640.0" prefWidth="992.0" style="-fx-background-color: #d3d3d3;" visible="false">
-         <children>
-            <TabPane layoutX="-1.0" layoutY="1.0" prefHeight="640.0" prefWidth="992.0" side="LEFT" style="-fx-padding: 0.5;" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
-                <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em;" text="Untitled Tab 1">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;" />
-                  </content>
-                </Tab>
-                  <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em;" text="Untitled Tab 1">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;" />
-                     </content>
-                  </Tab>
-                  <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em;" text="Untitled Tab 1">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;" />
-                     </content>
-                  </Tab>
-                  <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em;" text="Untitled Tab 1">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;" />
-                     </content>
-                  </Tab>
-              </tabs>
-            </TabPane>
-         </children></Pane>
       <Pane fx:id="pAdministrador" layoutX="19.0" layoutY="27.0" opacity="0.98" prefHeight="640.0" prefWidth="1003.0" style="-fx-background-color: #d3d3d3;" visible="false">
          <children>
             <TabPane fx:id="tabPanelAdmin" maxWidth="-Infinity" prefHeight="640.0" prefWidth="1007.0" side="LEFT" style="-fx-padding: 0.5;" tabClosingPolicy="UNAVAILABLE">
@@ -355,8 +328,54 @@
             </TabPane>
          </children>
       </Pane>
-      <Pane fx:id="pPrincipal1" layoutX="29.0" layoutY="41.0" prefHeight="640.0" prefWidth="992.0" style="-fx-background-color: #d3d3d3;">
+      <Pane fx:id="pPrincipal1" layoutX="29.0" layoutY="41.0" prefHeight="640.0" prefWidth="992.0" style="-fx-background-color: #d3d3d3;" visible="false">
          <children>
+            <Pane fx:id="pCojaLibro" prefHeight="640.0" prefWidth="1007.0" style="-fx-background-color: #b77d7d;" visible="false">
+               <children>
+                  <Label layoutX="110.0" layoutY="318.0" text="ISBN:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="110.0" layoutY="161.0" text="Título:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="110.0" layoutY="241.0" text="Autor:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="110.0" layoutY="391.0" text="Genero:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="110.0" layoutY="476.0" text="Nº de Páginas:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="51.0" layoutY="93.0" text="ID:">
+                     <font>
+                        <Font name="Gill Sans MT" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="lTituloLibro" layoutX="238.0" layoutY="157.0" prefHeight="32.0" prefWidth="174.0" />
+                  <TextField fx:id="lAutorLibro" layoutX="238.0" layoutY="237.0" prefHeight="32.0" prefWidth="174.0" />
+                  <TextField fx:id="lIsbnLibro" layoutX="238.0" layoutY="314.0" prefHeight="32.0" prefWidth="174.0" />
+                  <TextField fx:id="lGeneroLibro" layoutX="238.0" layoutY="387.0" prefHeight="32.0" prefWidth="174.0" />
+                  <TextField fx:id="lPaginasLibro" layoutX="238.0" layoutY="472.0" prefHeight="32.0" prefWidth="174.0" />
+                  <TextField fx:id="lIdlibro" layoutX="110.0" layoutY="89.0" prefHeight="32.0" prefWidth="247.0" />
+                  <Pane layoutX="490.0" layoutY="26.0" prefHeight="595.0" prefWidth="489.0" style="-fx-background-color: #d3d3d3; -fx-border-color: solid; -fx-border-radius: 60px;" />
+                  <Button fx:id="btVueltaBiblio" layoutX="95.0" layoutY="560.0" mnemonicParsing="false" onAction="#volveraBiblio" prefHeight="40.0" prefWidth="337.0" text="Volver a la biblioteca">
+                     <font>
+                        <Font name="Gill Sans MT" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
             <TabPane fx:id="tabPane" layoutX="-1.0" layoutY="1.0" prefHeight="640.0" prefWidth="992.0" side="LEFT" style="-fx-padding: 0.5;" tabClosingPolicy="UNAVAILABLE">
                <tabs>
                   <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em; -fx-pref-width: 90; -fx-text-alignment: right;" text="Inicio">
@@ -517,52 +536,6 @@
                   </Tab>
                </tabs>
             </TabPane>
-         </children>
-      </Pane>
-      <Pane fx:id="pCojaLibro" layoutX="29.0" layoutY="41.0" prefHeight="640.0" prefWidth="1007.0" style="-fx-background-color: #b77d7d;" visible="false">
-         <children>
-            <Label layoutX="110.0" layoutY="318.0" text="ISBN:">
-               <font>
-                  <Font name="Gill Sans MT" size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="110.0" layoutY="161.0" text="Título:">
-               <font>
-                  <Font name="Gill Sans MT" size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="110.0" layoutY="241.0" text="Autor:">
-               <font>
-                  <Font name="Gill Sans MT" size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="110.0" layoutY="391.0" text="Genero:">
-               <font>
-                  <Font name="Gill Sans MT" size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="110.0" layoutY="476.0" text="Nº de Páginas:">
-               <font>
-                  <Font name="Gill Sans MT" size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="51.0" layoutY="93.0" text="ID:">
-               <font>
-                  <Font name="Gill Sans MT" size="20.0" />
-               </font>
-            </Label>
-            <TextField fx:id="lTituloLibro" layoutX="238.0" layoutY="157.0" prefHeight="32.0" prefWidth="174.0" />
-            <TextField fx:id="lAutorLibro" layoutX="238.0" layoutY="237.0" prefHeight="32.0" prefWidth="174.0" />
-            <TextField fx:id="lIsbnLibro" layoutX="238.0" layoutY="314.0" prefHeight="32.0" prefWidth="174.0" />
-            <TextField fx:id="lGeneroLibro" layoutX="238.0" layoutY="387.0" prefHeight="32.0" prefWidth="174.0" />
-            <TextField fx:id="lPaginasLibro" layoutX="238.0" layoutY="472.0" prefHeight="32.0" prefWidth="174.0" />
-            <TextField fx:id="lIdlibro" layoutX="110.0" layoutY="89.0" prefHeight="32.0" prefWidth="247.0" />
-            <Pane layoutX="490.0" layoutY="26.0" prefHeight="595.0" prefWidth="489.0" style="-fx-background-color: #d3d3d3; -fx-border-color: solid; -fx-border-radius: 60px;" />
-            <Button fx:id="btVueltaBiblio" layoutX="95.0" layoutY="560.0" mnemonicParsing="false" onAction="#volveraBiblio" prefHeight="40.0" prefWidth="337.0" text="Volver a la biblioteca">
-               <font>
-                  <Font name="Gill Sans MT" size="18.0" />
-               </font>
-            </Button>
          </children>
       </Pane>
    </children>
