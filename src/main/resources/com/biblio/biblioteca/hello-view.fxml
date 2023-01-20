@@ -5,14 +5,17 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -68,7 +71,7 @@
               </tabs>
             </TabPane>
          </children></Pane>
-      <Pane fx:id="pAdministrador" layoutX="19.0" layoutY="27.0" opacity="0.98" prefHeight="640.0" prefWidth="1003.0" style="-fx-background-color: #d3d3d3;">
+      <Pane fx:id="pAdministrador" layoutX="19.0" layoutY="27.0" opacity="0.98" prefHeight="640.0" prefWidth="1003.0" style="-fx-background-color: #d3d3d3;" visible="false">
          <children>
             <TabPane fx:id="tabPanelAdmin" maxWidth="-Infinity" prefHeight="640.0" prefWidth="1007.0" side="LEFT" style="-fx-padding: 0.5;" tabClosingPolicy="UNAVAILABLE">
                <tabs>
@@ -350,6 +353,216 @@
                   </Tab>
                </tabs>
             </TabPane>
+         </children>
+      </Pane>
+      <Pane fx:id="pPrincipal1" layoutX="29.0" layoutY="41.0" prefHeight="640.0" prefWidth="992.0" style="-fx-background-color: #d3d3d3;">
+         <children>
+            <TabPane fx:id="tabPane" layoutX="-1.0" layoutY="1.0" prefHeight="640.0" prefWidth="992.0" side="LEFT" style="-fx-padding: 0.5;" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em; -fx-pref-width: 90; -fx-text-alignment: right;" text="Inicio">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;">
+                           <children>
+                              <Pane fx:id="pInicioUsuario" layoutX="-1.0" layoutY="-1.0" prefHeight="640.0" prefWidth="894.0">
+                                 <children>
+                                    <Button fx:id="btPerfil" layoutX="654.0" layoutY="382.0" mnemonicParsing="false" onAction="#veaPerfil" prefHeight="57.0" prefWidth="148.0" style="-fx-background-color: #b77d7d; -fx-border-style: solid; -fx-border-color: white; -fx-border-image-width: 10px;" text="Perfil">
+                                       <font>
+                                          <Font name="Gill Sans MT" size="22.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btLibros" layoutX="120.0" layoutY="382.0" mnemonicParsing="false" onAction="#veaLibro" prefHeight="57.0" prefWidth="148.0" style="-fx-background-color: #b77d7d; -fx-border-style: solid; -fx-border-color: white; -fx-border-image-width: 10px;" text="Libros">
+                                       <font>
+                                          <Font name="Gill Sans MT" size="22.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="btMisLibros" layoutX="381.0" layoutY="382.0" mnemonicParsing="false" onAction="#veaMisLibros" prefHeight="57.0" prefWidth="148.0" style="-fx-background-color: #b77d7d; -fx-border-style: solid; -fx-border-color: white; -fx-border-image-width: 10px;" text="Mis Libros">
+                                       <font>
+                                          <Font name="Gill Sans MT" size="22.0" />
+                                       </font>
+                                    </Button>
+                                    <ImageView fitHeight="174.0" fitWidth="180.0" layoutX="365.0" layoutY="180.0">
+                                       <image>
+                                          <Image url="@../../../../../../../Grado/AC/Proyecto%20Biblioteca%20Julian/biblioteca/src/main/resources/com/biblio/biblioteca/img/usuarioimg/biblioteca.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="172.0" fitWidth="173.0" layoutX="107.0" layoutY="180.0">
+                                       <image>
+                                          <Image url="@../../../../../../../Grado/AC/Proyecto%20Biblioteca%20Julian/biblioteca/src/main/resources/com/biblio/biblioteca/img/usuarioimg/libro.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="162.0" fitWidth="166.0" layoutX="645.0" layoutY="186.0">
+                                       <image>
+                                          <Image url="@../../../../../../../Grado/AC/Proyecto%20Biblioteca%20Julian/biblioteca/src/main/resources/com/biblio/biblioteca/img/usuarioimg/biblioteca(1).png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em; -fx-pref-width: 90;" text="Libros">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;">
+                           <children>
+                              <ScrollPane fx:id="scrollPane" prefHeight="648.0" prefWidth="896.0">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="638.0" prefWidth="894.0">
+                                       <children>
+                                          <Label layoutX="48.0" layoutY="24.0" prefHeight="27.0" prefWidth="181.0" text="Vistos Recientemente">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="48.0" layoutY="148.0" prefHeight="27.0" prefWidth="58.0" text="Libros">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <FlowPane fx:id="pVistosRecientemente" layoutX="48.0" layoutY="57.0" prefHeight="97.0" prefWidth="489.0" />
+                                          <Label layoutX="588.0" layoutY="44.0" prefHeight="27.0" prefWidth="53.0" text="Buscar:">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="tBuscaLibro" layoutX="679.0" layoutY="45.0" />
+                                          <FlowPane fx:id="imgPane" layoutX="48.0" layoutY="186.0" prefHeight="408.0" prefWidth="799.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em; -fx-pref-width: 90;" text="Mis Libros">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;">
+                           <children>
+                              <TitledPane animated="false" layoutX="56.0" layoutY="108.0" prefHeight="558.0" prefWidth="745.0" text="Datos">
+                                 <content>
+                                    <AnchorPane fx:id="pDatos1" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #b77d7d;">
+                                       <children>
+                                          <Label fx:id="lHardCodeLibroTitulo" layoutX="75.0" layoutY="167.0" />
+                                          <Label fx:id="lHarcodeLibroAutor" layoutX="75.0" layoutY="192.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </TitledPane>
+                              <Label layoutX="378.0" layoutY="32.0" prefHeight="32.0" prefWidth="99.0" text="Mis Libros">
+                                 <font>
+                                    <Font name="Gill Sans MT" size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab style="-fx-rotate: 90; -fx-padding: 3em 0.5em 3em 0.5em; -fx-pref-width: 90;" text="Perfil">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;">
+                           <children>
+                              <TitledPane animated="false" layoutX="39.0" layoutY="66.0" prefHeight="558.0" prefWidth="745.0" text="Datos">
+                                 <content>
+                                    <AnchorPane fx:id="pDatos" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #b77d7d;">
+                                       <children>
+                                          <Label layoutX="64.0" layoutY="41.0" prefHeight="32.0" prefWidth="99.0" text="Usuario:">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="114.0" layoutY="138.0" prefHeight="32.0" prefWidth="99.0" text="Nombre:">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="114.0" layoutY="209.0" prefHeight="32.0" prefWidth="99.0" text="Apellidos:">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="114.0" layoutY="281.0" prefHeight="32.0" prefWidth="99.0" text="E-Mail:">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="114.0" layoutY="355.0" prefHeight="32.0" prefWidth="99.0" text="Teléfono:">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <Label layoutX="114.0" layoutY="431.0" prefHeight="32.0" prefWidth="127.0" text="Fecha de Alta:">
+                                             <font>
+                                                <Font name="Gill Sans MT" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField layoutX="178.0" layoutY="41.0" prefHeight="32.0" prefWidth="188.0" />
+                                          <TextField layoutX="241.0" layoutY="139.0" prefHeight="32.0" prefWidth="188.0" />
+                                          <TextField layoutX="241.0" layoutY="209.0" prefHeight="32.0" prefWidth="188.0" />
+                                          <TextField layoutX="241.0" layoutY="281.0" prefHeight="32.0" prefWidth="188.0" />
+                                          <TextField layoutX="241.0" layoutY="355.0" prefHeight="32.0" prefWidth="188.0" />
+                                          <DatePicker layoutX="236.0" layoutY="431.0" prefHeight="32.0" prefWidth="198.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </TitledPane>
+                              <Label layoutX="423.0" layoutY="24.0" prefHeight="32.0" prefWidth="45.0" text="Perfil">
+                                 <font>
+                                    <Font name="Gill Sans MT" size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+         </children>
+      </Pane>
+      <Pane fx:id="pCojaLibro" layoutX="29.0" layoutY="41.0" prefHeight="640.0" prefWidth="1007.0" style="-fx-background-color: #b77d7d;" visible="false">
+         <children>
+            <Label layoutX="110.0" layoutY="318.0" text="ISBN:">
+               <font>
+                  <Font name="Gill Sans MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="110.0" layoutY="161.0" text="Título:">
+               <font>
+                  <Font name="Gill Sans MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="110.0" layoutY="241.0" text="Autor:">
+               <font>
+                  <Font name="Gill Sans MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="110.0" layoutY="391.0" text="Genero:">
+               <font>
+                  <Font name="Gill Sans MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="110.0" layoutY="476.0" text="Nº de Páginas:">
+               <font>
+                  <Font name="Gill Sans MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="51.0" layoutY="93.0" text="ID:">
+               <font>
+                  <Font name="Gill Sans MT" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="lTituloLibro" layoutX="238.0" layoutY="157.0" prefHeight="32.0" prefWidth="174.0" />
+            <TextField fx:id="lAutorLibro" layoutX="238.0" layoutY="237.0" prefHeight="32.0" prefWidth="174.0" />
+            <TextField fx:id="lIsbnLibro" layoutX="238.0" layoutY="314.0" prefHeight="32.0" prefWidth="174.0" />
+            <TextField fx:id="lGeneroLibro" layoutX="238.0" layoutY="387.0" prefHeight="32.0" prefWidth="174.0" />
+            <TextField fx:id="lPaginasLibro" layoutX="238.0" layoutY="472.0" prefHeight="32.0" prefWidth="174.0" />
+            <TextField fx:id="lIdlibro" layoutX="110.0" layoutY="89.0" prefHeight="32.0" prefWidth="247.0" />
+            <Pane layoutX="490.0" layoutY="26.0" prefHeight="595.0" prefWidth="489.0" style="-fx-background-color: #d3d3d3; -fx-border-color: solid; -fx-border-radius: 60px;" />
+            <Button fx:id="btVueltaBiblio" layoutX="95.0" layoutY="560.0" mnemonicParsing="false" onAction="#volveraBiblio" prefHeight="40.0" prefWidth="337.0" text="Volver a la biblioteca">
+               <font>
+                  <Font name="Gill Sans MT" size="18.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>

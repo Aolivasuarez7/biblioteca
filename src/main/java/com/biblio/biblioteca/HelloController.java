@@ -7,12 +7,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.util.Callback;
 
 import java.io.FileInputStream;
@@ -22,6 +24,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -218,6 +221,88 @@ public class HelloController implements Initializable {
     @FXML
     private TextField txfGeneroLibrosAdmin;
 
+
+    @FXML
+    private Button btVueltaBiblio;
+
+    @FXML
+    private Pane pCojaLibro;
+
+
+
+    @FXML
+    private Button btLibros;
+
+    @FXML
+    private Button btMisLibros;
+
+    @FXML
+    private Button btPerfil;
+
+    @FXML
+    private ImageView imgCodeLibro;
+
+    @FXML
+    private ImageView imgHardcodeUsuario;
+
+    @FXML
+    private FlowPane imgPane;
+
+    @FXML
+    private TextField lAutorLibro;
+
+    @FXML
+    private TextField lGeneroLibro;
+
+    @FXML
+    private Label lHarcodeLibroAutor;
+
+    @FXML
+    private Label lHardCodeLibroTitulo;
+
+    @FXML
+    private TextField lIdlibro;
+
+    @FXML
+    private TextField lIsbnLibro;
+
+    @FXML
+    private TextField lPaginasLibro;
+
+    @FXML
+    private TextField lTituloLibro;
+
+
+
+    @FXML
+    private AnchorPane pDatos;
+
+    @FXML
+    private AnchorPane pDatos1;
+
+    @FXML
+    private Pane pInicioUsuario;
+
+
+    @FXML
+    private FlowPane pVistosRecientemente;
+
+
+    @FXML
+    private ScrollPane scrollPane;
+
+    @FXML
+    private GridPane gridPane;
+    @FXML
+    private TextField txfUsuario;
+    @FXML
+    private TextField tBuscaLibro;
+    @FXML
+    private TabPane tabPane;
+
+    @FXML
+    private Button volverTodosLibros;
+
     @FXML
     private TextField txfIsbnLibroAdmin;
 
@@ -239,8 +324,7 @@ public class HelloController implements Initializable {
     @FXML
     private TextField txfTituloLibrosAdmin;
 
-    @FXML
-    private TextField txfUsuario;
+
 
     @FXML
     private ComboBox<String> cbAutorLibros;
@@ -264,12 +348,7 @@ public class HelloController implements Initializable {
         }
     }
 
-    public static Connection conBD() throws ClassNotFoundException, SQLException {
-        Class.forName("org.mariadb.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "Root");
-        return con;
 
-    }
 
 
     @FXML
@@ -1172,6 +1251,207 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
+    private Label label;
+
+    @FXML
+    void todosLibros(ActionEvent event) {
+        imgPane.getChildren().clear();
+        insertaImg();
+        volverTodosLibros.setVisible(false);
+        tBuscaLibro.setText("");
+    }
+
+    @FXML
+    void volveraBiblio(ActionEvent event) {
+        pCojaLibro.setVisible(false);
+        pPrincipal.setVisible(true);
+    }
+
+    @FXML
+    void busquedaRegexText(ActionEvent event) {
+
+        buscarLibros();
+        volverTodosLibros.setVisible(true);
+    }
+
+
+    @FXML
+    void veaPerfil(ActionEvent event) {
+        tabPane.getSelectionModel().select(3);
+    }
+
+    @FXML
+    void veaLibro(ActionEvent event) {
+        tabPane.getSelectionModel().select(1);
+    }
+
+    @FXML
+    void veaMisLibros(ActionEvent event) {
+        tabPane.getSelectionModel().select(2);
+    }
+
+
+    public static Connection conBD() throws ClassNotFoundException, SQLException {
+        Class.forName("org.mariadb.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "root");
+    }
+
+
+    void scrolling() {
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+    }
+
+
+    void buscarLibros() {
+        String buscarLibro = tBuscaLibro.getText();
+        String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
+        Pattern pattern = Pattern.compile(regex);
+
+        try {
+            Statement stmt = conBD().createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT idlibro,titulo,enlaceImg FROM libros WHERE titulo REGEXP '" + regex + "' ");
+
+            while (rs.next()) {
+                //Cogiendo datos
+                int idLibro = rs.getInt(1);
+                String dis = rs.getString(2);
+                InputStream fis = rs.getBinaryStream(3);
+
+                System.out.println(dis);
+
+                Pane pane = getPane(dis, fis);
+
+                //Cambiando a panel informacion
+                muestraDatos(stmt, idLibro, dis, pane);
+
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    void panePerfil (){
+
+    }
+
+    private Pane getPane(String dis, InputStream fis) {
+        imgPane.getChildren().clear();
+        //Seteando Imagen
+        Image image = new Image(fis);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(250);
+        imageView.setFitWidth(170);
+        imageView.setImage(image);
+
+        //Seteando Textos
+        label = new Label(dis);
+        label.setFont(new Font("Lato", 20));
+
+        //Creando VBox
+        GridPane gridPane = new GridPane();
+        Pane pane = new Pane();
+        VBox imagBox = new VBox();
+        VBox tituBox = new VBox();
+        VBox geneVBox = new VBox();
+        imagBox.getChildren().add(imageView);
+        tituBox.getChildren().add(label);
+        geneVBox.getChildren().addAll(imagBox, tituBox);
+        pane.getChildren().add(geneVBox);
+        pane.setPadding(new Insets(20, 20, 20, 20));
+        gridPane.getChildren().add(pane);
+
+
+        //Añadiendo a panel
+        imgPane.getChildren().add(gridPane);
+        return pane;
+    }
+
+    void insertaImg() {
+
+        try {
+            Statement stmt = conBD().createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT idlibro,titulo,enlaceImg,idautor from libros");
+            while (rs.next()) {
+                //Cogiendo datos
+                int idLibro = rs.getInt(1);
+                String dis = rs.getString(2);
+                InputStream fis = rs.getBinaryStream(3);
+                Pane pane = getPane2(dis, fis);
+                muestraDatos(stmt, idLibro, dis, pane);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private Pane getPane2(String dis, InputStream fis) {
+        System.out.println(dis);
+
+        //Seteando Imagen
+        Image image = new Image(fis);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(250);
+        imageView.setFitWidth(170);
+        imageView.setImage(image);
+
+        //Seteando Textos
+        label = new Label(dis);
+        label.setFont(new Font("Lato", 20));
+
+        //Creando VBox
+        GridPane gridPane = new GridPane();
+        Pane pane = new Pane();
+        VBox imagBox = new VBox();
+        VBox tituBox = new VBox();
+        VBox geneVBox = new VBox();
+        imagBox.getChildren().add(imageView);
+        tituBox.getChildren().add(label);
+        geneVBox.getChildren().addAll(imagBox, tituBox);
+        pane.getChildren().add(geneVBox);
+        pane.setPadding(new Insets(20, 20, 20, 20));
+        gridPane.getChildren().add(pane);
+
+
+        //Añadiendo a panel
+        imgPane.getChildren().add(gridPane);
+        return pane;
+    }
+
+    private void muestraDatos(Statement stmt, int idLibro, String dis, Pane pane) {
+        //Cambiando a panel informacion
+        pane.setOnMouseClicked(e -> {
+            pPrincipal.setVisible(false);
+            pCojaLibro.setVisible(true);
+            System.out.println(dis);
+            System.out.println(idLibro);
+            try {
+                ResultSet st = stmt.executeQuery("SELECT * from libros where idlibro= " + idLibro);
+                while (st.next()) {
+                    int idlibro = st.getInt("IdLibro");
+                    String titulo = st.getString("titulo");
+                    int numPag = st.getInt("numPaginas");
+                    int idautor = st.getInt("idAutor");
+                    int idgenero = st.getInt("idGenero");
+                    int isbn = st.getInt("isbn");
+                    Blob enlaceImg = st.getBlob("enlaceImg");
+
+                    lIdlibro.setText(String.valueOf(idlibro));
+                    lTituloLibro.setText(titulo);
+                    lAutorLibro.setText(String.valueOf(idautor));
+                    lIsbnLibro.setText(String.valueOf(isbn));
+                    lGeneroLibro.setText(String.valueOf(idgenero));
+                    lPaginasLibro.setText(String.valueOf(numPag));
+
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+        });
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -1184,6 +1464,9 @@ public class HelloController implements Initializable {
 
         datosAutorComboBox();
         datosGeneroComboBox();
+        insertaImg();
+        scrolling();
+
 
     }
 }
