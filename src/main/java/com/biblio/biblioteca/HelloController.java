@@ -23,12 +23,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import javax.swing.JFileChooser;
+import java.util.*;
+import javax.swing.*;
 import java.io.File;
 import java.util.regex.Pattern;
 
@@ -338,6 +336,12 @@ public class HelloController implements Initializable {
 
     private String enlaceImg;
 
+
+
+    public static Connection conBD() throws ClassNotFoundException, SQLException {
+        Class.forName("org.mariadb.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mariadb://localhost:3307/bd_biblio", "root", "DAM2122");
+    }
 
     @FXML
     void CambiaPanel(ActionEvent event) {
@@ -923,9 +927,117 @@ public class HelloController implements Initializable {
 
 
     /**
-     * Gestión
+     * Gestión Reservas
      */
+    @FXML
+    public  int devuelveIDUsuario(){
+        int idUsuario = 0;
 
+        String nombreUsuario = JOptionPane.showInputDialog("Inserta el nombre de usuario");
+
+
+        try {
+            Statement s = conBD().createStatement();
+            ResultSet rs = s.executeQuery("select idCliente from clientes where userBiblio ="+"'"+nombreUsuario+"'");
+
+            if (rs.next()) {
+                idUsuario = rs.getInt(1);
+            }
+
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        System.out.println(idUsuario);
+
+        return idUsuario;
+    }
+
+    public  int devuelveCantidadLibro(Object value){
+        int cantidadLibros = 0;
+
+        try {
+            Statement s = conBD().createStatement();
+            ResultSet rs = s.executeQuery("select cantidadLibros from libros where IdLibro = "+ value);
+
+            if (rs.next()) {
+                cantidadLibros = rs.getInt(1);
+            }
+
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        System.out.println(cantidadLibros);
+
+        return cantidadLibros;
+    }
+
+    @FXML
+    public void restaCantidadLibros(Object value){
+        int numLibros = devuelveCantidadLibro(value) - 1;
+
+        try {
+
+            PreparedStatement encapsulaPSCons = conBD().prepareStatement("update libros set cantidadLibros = ? where IdLibro = ?");
+            encapsulaPSCons.setInt(1,numLibros);
+            encapsulaPSCons.setObject(2,value);
+
+            //Actualiza
+            encapsulaPSCons.executeUpdate();
+
+            //cierra panel
+
+
+
+            //Cierra las conexiones
+            encapsulaPSCons.close();
+            conBD().close();
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void insertaReserva(ActionEvent event) {
+       int idCliente;
+       java.sql.Date fechaPrestamo;
+       int idLibro;
+       ObservableList<String>data = tableLibrosAdmin.getSelectionModel().getSelectedItem();
+       Object value = null;
+       value = data.get(0);
+        try {
+            fechaPrestamo = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+            idCliente = devuelveIDUsuario();
+
+            PreparedStatement encapsulaPSCons = conBD().prepareStatement("INSERT INTO prestamos values(null,?,?,?)");
+            encapsulaPSCons.setInt(1,idCliente);
+            encapsulaPSCons.setDate(2,fechaPrestamo);
+            encapsulaPSCons.setObject(3,value);
+
+
+            //Actualiza
+            encapsulaPSCons.executeUpdate();
+
+            //cierra panel
+
+
+
+            //Cierra las conexiones
+            encapsulaPSCons.close();
+            conBD().close();
+
+            //Crea un nuevo paciente y lo añade a la lista
+            pDatosLibros.setVisible(false);
+            pPrincipalLibros.setVisible(true);
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        restaCantidadLibros(data);
+    }
 
 
 
@@ -1299,12 +1411,6 @@ public class HelloController implements Initializable {
     }
 
 
-    public static Connection conBD() throws ClassNotFoundException, SQLException {
-        Class.forName("org.mariadb.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "Root");
-    }
-
-
     void scrolling() {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -1473,6 +1579,8 @@ public class HelloController implements Initializable {
         datosGeneroComboBox();
         insertaImg();
         scrolling();
+
+
 
 
     }

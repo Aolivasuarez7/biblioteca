@@ -20,14 +20,14 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="689.0" prefWidth="1045.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.biblio.biblioteca.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="689.0" prefWidth="1045.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.biblio.biblioteca.HelloController">
    <children>
       <ImageView fitHeight="704.0" fitWidth="1047.0" layoutX="-3.0" layoutY="-1.0">
          <image>
             <Image url="@img/libreria-para-empresas.jpg" />
          </image>
       </ImageView>
-      <Pane fx:id="pPassword" layoutX="322.0" layoutY="258.0" prefHeight="203.0" prefWidth="420.0" style="-fx-background-color: #d3d3d3; -fx-border-width: 5px 5px 5px 5px;">
+      <Pane fx:id="pPassword" layoutX="322.0" layoutY="258.0" prefHeight="203.0" prefWidth="420.0" style="-fx-background-color: #d3d3d3; -fx-border-width: 5px 5px 5px 5px;" visible="false">
          <children>
             <TextField fx:id="txfUsuario" layoutX="181.0" layoutY="45.0" prefHeight="32.0" prefWidth="198.0" />
             <PasswordField fx:id="passFieldContrase" layoutX="181.0" layoutY="105.0" prefHeight="32.0" prefWidth="198.0" />
@@ -44,7 +44,7 @@
             <Button fx:id="btAceptar" layoutX="173.0" layoutY="157.0" mnemonicParsing="false" onAction="#CambiaPanel" prefHeight="32.0" prefWidth="74.0" text="Aceptar" />
          </children>
       </Pane>
-      <Pane fx:id="pAdministrador" layoutX="19.0" layoutY="27.0" opacity="0.98" prefHeight="640.0" prefWidth="1003.0" style="-fx-background-color: #d3d3d3;" visible="false">
+      <Pane fx:id="pAdministrador" layoutX="19.0" layoutY="27.0" opacity="0.98" prefHeight="640.0" prefWidth="1003.0" style="-fx-background-color: #d3d3d3;">
          <children>
             <TabPane fx:id="tabPanelAdmin" maxWidth="-Infinity" prefHeight="640.0" prefWidth="1007.0" side="LEFT" style="-fx-padding: 0.5;" tabClosingPolicy="UNAVAILABLE">
                <tabs>
@@ -170,7 +170,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="67.0" style="-fx-padding: 3em;">
                            <children>
-                              <Pane fx:id="pDatosLibros" prefHeight="648.0" prefWidth="926.0">
+                              <Pane fx:id="pDatosLibros" prefHeight="648.0" prefWidth="926.0" visible="false">
                                  <children>
                                     <Pane prefHeight="640.0" prefWidth="927.0" style="-fx-background-color: #d49564;">
                                        <children>
@@ -229,7 +229,7 @@
                                     </Pane>
                                  </children>
                               </Pane>
-                              <Pane fx:id="pPrincipalLibros" prefHeight="648.0" prefWidth="925.0" style="-fx-background-color: #d49564;" visible="false">
+                              <Pane fx:id="pPrincipalLibros" prefHeight="648.0" prefWidth="925.0" style="-fx-background-color: #d49564;">
                                  <children>
                                     <TableView fx:id="tableLibrosAdmin" layoutX="59.0" layoutY="99.0" prefHeight="450.0" prefWidth="662.0" />
                                     <TextField fx:id="txfBuscarLibrosAdmin" layoutX="523.0" layoutY="62.0" prefHeight="25.0" prefWidth="198.0" />
@@ -240,6 +240,7 @@
                                     </Label>
                                     <Button fx:id="btCrearLibrosAdmin" layoutX="758.0" layoutY="135.0" mnemonicParsing="false" onAction="#verNuevoLibro" prefHeight="32.0" prefWidth="95.0" text="Crear" />
                                     <Button fx:id="btVerDatosLibrosAdmin" layoutX="759.0" layoutY="185.0" mnemonicParsing="false" onAction="#verDatosLibro" prefHeight="32.0" prefWidth="95.0" text="Ver" />
+                                    <Button fx:id="btReservarLibroAdmin" layoutX="96.0" layoutY="576.0" mnemonicParsing="false" onAction="#insertaReserva" prefHeight="32.0" prefWidth="124.0" text="Reservar" />
                                  </children>
                               </Pane>
                            </children>
