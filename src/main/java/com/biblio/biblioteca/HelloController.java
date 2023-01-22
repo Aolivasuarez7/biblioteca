@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 
 public class HelloController implements Initializable {
 
+
     @FXML
     private Button btAceptar;
 
@@ -45,9 +46,6 @@ public class HelloController implements Initializable {
 
     @FXML
     private Button btCerrarUsuario;
-
-    @FXML
-    private Button btReservarLibroAdmin;
 
     @FXML
     private Button btCrearUsuario;
@@ -231,6 +229,8 @@ public class HelloController implements Initializable {
     @FXML
     private Pane pCojaLibro;
 
+
+
     @FXML
     private Button btLibros;
 
@@ -248,30 +248,25 @@ public class HelloController implements Initializable {
 
     @FXML
     private FlowPane imgPane;
+    @FXML
+    private TextField txfGeneroLibroUser;
+    @FXML
+    private TextField txfAutorLibroUser;
 
     @FXML
-    private TextField lAutorLibro;
+    private TextField txfIdlibroUser;
 
     @FXML
-    private TextField lGeneroLibro;
+    private TextField txfIsbnLibroUser;
+
 
     @FXML
-    private Label lHarcodeLibroAutor;
+    private TextField txfPaginasLibroUser;
+
 
     @FXML
-    private Label lHardCodeLibroTitulo;
+    private TextField txfTituloLibroUser;
 
-    @FXML
-    private TextField lIdlibro;
-
-    @FXML
-    private TextField lIsbnLibro;
-
-    @FXML
-    private TextField lPaginasLibro;
-
-    @FXML
-    private TextField lTituloLibro;
 
 
 
@@ -297,12 +292,12 @@ public class HelloController implements Initializable {
     @FXML
     private TextField txfUsuario;
     @FXML
-    private TextField tBuscaLibro;
+    private TextField txfBuscaLibro;
     @FXML
     private TabPane tabPane;
 
     @FXML
-    private Button volverTodosLibros;
+    private Button btVolverALibros;
 
     @FXML
     private TextField txfIsbnLibroAdmin;
@@ -332,6 +327,7 @@ public class HelloController implements Initializable {
 
     @FXML
     private ComboBox<String> cbGeneroLibros;
+
 
     @FXML
     private ImageView imgLibro;
@@ -1265,8 +1261,8 @@ public class HelloController implements Initializable {
     void todosLibros(ActionEvent event) {
         imgPane.getChildren().clear();
         insertaImg();
-        volverTodosLibros.setVisible(false);
-        tBuscaLibro.setText("");
+        btVolverALibros.setVisible(false);
+        txfBuscaLibro.setText("");
     }
 
     @FXML
@@ -1279,7 +1275,7 @@ public class HelloController implements Initializable {
     void busquedaRegexText(ActionEvent event) {
 
         buscarLibros();
-        volverTodosLibros.setVisible(true);
+        btVolverALibros.setVisible(true);
     }
 
 
@@ -1312,7 +1308,7 @@ public class HelloController implements Initializable {
 
 
     void buscarLibros() {
-        String buscarLibro = tBuscaLibro.getText();
+        String buscarLibro = txfBuscaLibro.getText();
         String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
         Pattern pattern = Pattern.compile(regex);
 
@@ -1444,12 +1440,12 @@ public class HelloController implements Initializable {
                     int isbn = st.getInt("isbn");
                     Blob enlaceImg = st.getBlob("enlaceImg");
 
-                    lIdlibro.setText(String.valueOf(idlibro));
-                    lTituloLibro.setText(titulo);
-                    lAutorLibro.setText(String.valueOf(idautor));
-                    lIsbnLibro.setText(String.valueOf(isbn));
-                    lGeneroLibro.setText(String.valueOf(idgenero));
-                    lPaginasLibro.setText(String.valueOf(numPag));
+                    txfIdlibroUser.setText(String.valueOf(idlibro));
+                    txfTituloLibroUser.setText(titulo);
+                    txfAutorLibroUser.setText(String.valueOf(idautor));
+                    txfIsbnLibroUser.setText(String.valueOf(isbn));
+                    txfGeneroLibroUser.setText(String.valueOf(idgenero));
+                    txfPaginasLibroUser.setText(String.valueOf(numPag));
 
                 }
             } catch (SQLException ex) {
