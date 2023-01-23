@@ -4,6 +4,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,6 +36,7 @@ import java.util.regex.Pattern;
 
 public class HelloController implements Initializable {
 
+    private Label label;
 
     @FXML
     private Button btAceptar;
@@ -267,6 +270,8 @@ public class HelloController implements Initializable {
     @FXML
     private TextField txfTituloLibroUser;
 
+    @FXML
+    private Pane pImagenUser;
 
 
 
@@ -274,6 +279,7 @@ public class HelloController implements Initializable {
     private AnchorPane pDatos;
 
     @FXML
+
     private AnchorPane pDatos1;
 
     @FXML
@@ -298,6 +304,9 @@ public class HelloController implements Initializable {
 
     @FXML
     private Button btVolverALibros;
+
+    @FXML
+    private  Button btvolverTablaUserAdmin;
 
     @FXML
     private TextField txfIsbnLibroAdmin;
@@ -327,6 +336,9 @@ public class HelloController implements Initializable {
 
     @FXML
     private ComboBox<String> cbGeneroLibros;
+
+    @FXML
+    private TextField txfBuscaAutoresAdmin;
 
 
     @FXML
@@ -395,9 +407,9 @@ public class HelloController implements Initializable {
         String nombre;
         String apellidos;
         String dni;
-        java.sql.Date fechaNac;
+        Date fechaNac;
         int telefono;
-        java.sql.Date fechaAlta;
+        Date fechaAlta;
         String usuarioProvisional;
         String mail;
 
@@ -431,7 +443,6 @@ public class HelloController implements Initializable {
                 pPrincipalUsuariosAdmin.setVisible(true);
 
                 agregaFilas("clientes",tableUsuariosAdmin);
-
 
 
                 //Cierra las conexiones
@@ -1162,6 +1173,11 @@ public class HelloController implements Initializable {
         }
     }
 
+    private void extracted(ObservableList<ObservableList> data, ResultSet rs) {
+
+    }
+
+
 
     @FXML
     void muestraBoton(MouseEvent event) {
@@ -1255,7 +1271,111 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
-    private Label label;
+
+    public void buscarUsuarioAdmin(ActionEvent event) {
+        ObservableList<ObservableList> data;
+        Connection c ;
+        data = FXCollections.observableArrayList();
+        String buscarLibro = txfBuscarUsuarios.getText();
+        String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
+        Pattern pattern = Pattern.compile(regex);
+        try{
+            c = conBD();
+            String SQL = "SELECT * from clientes WHERE nombre REGEXP '" + regex + "' " ;
+            ResultSet rs = c.createStatement().executeQuery(SQL);
+
+            while(rs.next()){
+                data.clear();
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
+                    row.add(rs.getString(i));
+                    row.add(rs.getString(i));
+                }
+                data.add(row);
+                System.out.println(data);
+            }
+
+            tableUsuariosAdmin.setItems(data);
+            btvolverTablaUserAdmin.setVisible(true);
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Error on Building Data");
+        }
+    }
+
+
+    @FXML
+    void buscarLibrosAdmin(ActionEvent event) {
+        ObservableList<ObservableList> data;
+        Connection c ;
+        data = FXCollections.observableArrayList();
+        String buscarLibro = txfBuscarLibrosAdmin.getText();
+        String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
+        Pattern pattern = Pattern.compile(regex);
+        try{
+            c = conBD();
+            String SQL = "SELECT * from libros WHERE titulo REGEXP '" + regex + "' " ;
+            ResultSet rs = c.createStatement().executeQuery(SQL);
+
+            while(rs.next()){
+                data.clear();
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
+                    row.add(rs.getString(i));
+                    row.add(rs.getString(i));
+                }
+                data.add(row);
+            }
+
+            tableLibrosAdmin.setItems(data);
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Error on Building Data");
+        }
+
+    }
+    @FXML
+    void busquedaAutoresAdmin(ActionEvent event) {
+        ObservableList<ObservableList> data;
+        Connection c ;
+        data = FXCollections.observableArrayList();
+        String buscarLibro = txfBuscaAutoresAdmin.getText();
+        String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
+        Pattern pattern = Pattern.compile(regex);
+        try{
+            c = conBD();
+            String SQL = "SELECT * from autores WHERE nombre REGEXP '" + regex + "' " ;
+            ResultSet rs = c.createStatement().executeQuery(SQL);
+
+            while(rs.next()){
+                data.clear();
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
+                    row.add(rs.getString(i));
+                    row.add(rs.getString(i));
+                }
+                data.add(row);
+                System.out.println(data);
+            }
+
+            tableAutores.setItems(data);
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Error on Building Data");
+        }
+    }
+
+    @FXML
+    void volverTodosUserAdmin(ActionEvent event){
+        construyeDatos("clientes", tableUsuariosAdmin);
+        btvolverTablaUserAdmin.setVisible(false);
+        txfBuscarUsuarios.setText(" ");
+
+    }
+
+
 
     @FXML
     void todosLibros(ActionEvent event) {
@@ -1276,6 +1396,7 @@ public class HelloController implements Initializable {
 
         buscarLibros();
         btVolverALibros.setVisible(true);
+
     }
 
 
@@ -1297,14 +1418,9 @@ public class HelloController implements Initializable {
 
     public static Connection conBD() throws ClassNotFoundException, SQLException {
         Class.forName("org.mariadb.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "Root");
+        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "root");
     }
 
-
-    void scrolling() {
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-    }
 
 
     void buscarLibros() {
@@ -1335,8 +1451,9 @@ public class HelloController implements Initializable {
         }
     }
 
-    void panePerfil (){
-
+    void scrolling (){
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
     }
 
     private Pane getPane(String dis, InputStream fis) {
@@ -1438,7 +1555,7 @@ public class HelloController implements Initializable {
                     int idautor = st.getInt("idAutor");
                     int idgenero = st.getInt("idGenero");
                     int isbn = st.getInt("isbn");
-                    Blob enlaceImg = st.getBlob("enlaceImg");
+                    InputStream fis = st.getBinaryStream("enlaceImg");
 
                     txfIdlibroUser.setText(String.valueOf(idlibro));
                     txfTituloLibroUser.setText(titulo);
@@ -1446,6 +1563,15 @@ public class HelloController implements Initializable {
                     txfIsbnLibroUser.setText(String.valueOf(isbn));
                     txfGeneroLibroUser.setText(String.valueOf(idgenero));
                     txfPaginasLibroUser.setText(String.valueOf(numPag));
+
+                    Image image = new Image(fis);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(595);
+                    imageView.setFitWidth(489);
+                    imageView.setImage(image);
+
+                    pImagenUser.getChildren().add(imageView);
+
 
                 }
             } catch (SQLException ex) {
@@ -1469,8 +1595,9 @@ public class HelloController implements Initializable {
         datosGeneroComboBox();
         insertaImg();
         scrolling();
-
-
     }
+
+
+
 }
 
