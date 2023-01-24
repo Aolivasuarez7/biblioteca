@@ -1232,6 +1232,11 @@ public class HelloController implements Initializable {
     }
 
     public void construyeDatosTablaLibros(String nomTabla, TableView tabla){
+        /**
+         * Construye y muestra por pantalla
+         * en tabla los datos
+         *
+         */
 
         ObservableList<ObservableList> data;
         Connection c ;
@@ -1273,6 +1278,11 @@ public class HelloController implements Initializable {
     }
 
     public void buscarUsuarioAdmin(ActionEvent event) {
+
+        /**
+         * Action Event que filtra una busqueda
+         * para mostrar los datos en la tabla elegidos
+         */
         ObservableList<ObservableList> data;
         Connection c ;
         data = FXCollections.observableArrayList();
@@ -1308,6 +1318,10 @@ public class HelloController implements Initializable {
 
     @FXML
     void buscarLibrosAdmin(ActionEvent event) {
+        /**
+         * Action Event que filtra una busqueda
+         * para mostrar los datos en la tabla elegidos
+         */
         ObservableList<ObservableList> data;
         Connection c ;
         data = FXCollections.observableArrayList();
@@ -1338,6 +1352,10 @@ public class HelloController implements Initializable {
     }
     @FXML
     void busquedaAutoresAdmin(ActionEvent event) {
+        /**
+         * Action Event que filtra una busqueda
+         * para mostrar los datos en la tabla elegidos
+         */
         ObservableList<ObservableList> data;
         Connection c ;
         data = FXCollections.observableArrayList();
@@ -1369,6 +1387,11 @@ public class HelloController implements Initializable {
 
     @FXML
     void volverTodosUserAdmin(ActionEvent event){
+        /**
+         * Action Event que al pulsar el boton volver
+         * vuelva a mostrar todos los datos para reiniciar
+         * la búsqueda
+         */
         construyeDatos("clientes", tableUsuariosAdmin);
         btvolverTablaUserAdmin.setVisible(false);
         txfBuscarUsuarios.setText(" ");
@@ -1379,6 +1402,11 @@ public class HelloController implements Initializable {
 
     @FXML
     void todosLibros(ActionEvent event) {
+        /**
+         * Action Event que al pulsar el boton volver
+         * vuelva a mostrar todos los datos para reiniciar
+         * la búsqueda
+         */
         imgPane.getChildren().clear();
         insertaImg();
         btVolverALibros.setVisible(false);
@@ -1387,12 +1415,21 @@ public class HelloController implements Initializable {
 
     @FXML
     void volveraBiblio(ActionEvent event) {
+        /**
+         * Action Event que al pulsar el boton volver
+         * vuelva a mostrar todos los datos para reiniciar
+         * la búsqueda
+         */
         pCojaLibro.setVisible(false);
         pPrincipal1.setVisible(true);
     }
 
     @FXML
     void busquedaRegexText(ActionEvent event) {
+        /**
+         * Action Event que al iniciarse haga una
+         * búsqueda por regex para filtrar el texto
+         */
 
         buscarLibros();
         btVolverALibros.setVisible(true);
@@ -1402,21 +1439,36 @@ public class HelloController implements Initializable {
 
     @FXML
     void veaPerfil(ActionEvent event) {
+        /**
+         * Action Event que al pulsar el boton
+         * vaya al tab seleccionado
+         */
         tabPane.getSelectionModel().select(3);
     }
 
     @FXML
     void veaLibro(ActionEvent event) {
+        /**
+         * Action Event que al pulsar el boton
+         * vaya al tab seleccionado
+         */
         tabPane.getSelectionModel().select(1);
     }
 
     @FXML
     void veaMisLibros(ActionEvent event) {
+        /**
+         * Action Event que al pulsar el boton
+         * vaya al tab seleccionado
+         */
         tabPane.getSelectionModel().select(2);
     }
 
 
     public static Connection conBD() throws ClassNotFoundException, SQLException {
+        /**
+         * Método para la conexión de la base de datos
+         */
         Class.forName("org.mariadb.jdbc.Driver");
         return DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "root");
     }
@@ -1424,6 +1476,11 @@ public class HelloController implements Initializable {
 
 
     void buscarLibros() {
+        /**
+         * Método que busca mediante Regex
+         * los valores de los libros para mostrarlos a través
+         * del Pane
+         */
         String buscarLibro = txfBuscaLibro.getText();
         String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
         Pattern pattern = Pattern.compile(regex);
@@ -1452,11 +1509,19 @@ public class HelloController implements Initializable {
     }
 
     void scrolling (){
+        /**
+         * Método que hace que el scrollPane
+         * se mueva al añadir más datos
+         */
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
     }
 
     private Pane getPane(String dis, InputStream fis) {
+        /**
+         * Método que añade imágenes
+         * al panel a través de una consulta externa
+         */
         imgPane.getChildren().clear();
         //Seteando Imagen
         Image image = new Image(fis);
@@ -1489,6 +1554,10 @@ public class HelloController implements Initializable {
     }
 
     void insertaImg() {
+        /**
+         * Método que añade imágenes con consulta
+         * y apoyar al método anterior
+         */
 
         try {
             Statement stmt = conBD().createStatement();
@@ -1508,6 +1577,10 @@ public class HelloController implements Initializable {
 
 
     private Pane getPane2(String dis, InputStream fis) {
+        /**
+         * Método que añade imágenes
+         * al panel a través de una consulta externa
+         */
         System.out.println(dis);
 
         //Seteando Imagen
@@ -1541,6 +1614,10 @@ public class HelloController implements Initializable {
     }
 
     private void muestraDatos(Statement stmt, int idLibro, String dis, Pane pane) {
+        /**
+         * Método que muestra los datos del libro
+         * seleccionado en el panel donde se muestra
+         */
         //Cambiando a panel informacion
         pane.setOnMouseClicked(e -> {
             pCojaLibro.setVisible(true);
@@ -1584,6 +1661,10 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        /**
+         * Método Initialize
+         */
 
         construyeDatos("clientes", tableUsuariosAdmin);
         construyeDatos("autores",tableAutores);
