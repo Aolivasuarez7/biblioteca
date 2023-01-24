@@ -4,8 +4,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,18 +23,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import javax.swing.JFileChooser;
+import java.util.*;
+import javax.swing.*;
 import java.io.File;
 import java.util.regex.Pattern;
 
 public class HelloController implements Initializable {
-
-    private Label label;
 
     @FXML
     private Button btAceptar;
@@ -49,6 +43,9 @@ public class HelloController implements Initializable {
 
     @FXML
     private Button btCerrarUsuario;
+
+    @FXML
+    private Button btReservarLibroAdmin;
 
     @FXML
     private Button btCrearUsuario;
@@ -232,8 +229,6 @@ public class HelloController implements Initializable {
     @FXML
     private Pane pCojaLibro;
 
-
-
     @FXML
     private Button btLibros;
 
@@ -251,27 +246,30 @@ public class HelloController implements Initializable {
 
     @FXML
     private FlowPane imgPane;
-    @FXML
-    private TextField txfGeneroLibroUser;
-    @FXML
-    private TextField txfAutorLibroUser;
 
     @FXML
-    private TextField txfIdlibroUser;
+    private TextField lAutorLibro;
 
     @FXML
-    private TextField txfIsbnLibroUser;
-
-
-    @FXML
-    private TextField txfPaginasLibroUser;
-
+    private TextField lGeneroLibro;
 
     @FXML
-    private TextField txfTituloLibroUser;
+    private Label lHarcodeLibroAutor;
 
     @FXML
-    private Pane pImagenUser;
+    private Label lHardCodeLibroTitulo;
+
+    @FXML
+    private TextField lIdlibro;
+
+    @FXML
+    private TextField lIsbnLibro;
+
+    @FXML
+    private TextField lPaginasLibro;
+
+    @FXML
+    private TextField lTituloLibro;
 
 
 
@@ -279,7 +277,6 @@ public class HelloController implements Initializable {
     private AnchorPane pDatos;
 
     @FXML
-
     private AnchorPane pDatos1;
 
     @FXML
@@ -298,15 +295,12 @@ public class HelloController implements Initializable {
     @FXML
     private TextField txfUsuario;
     @FXML
-    private TextField txfBuscaLibro;
+    private TextField tBuscaLibro;
     @FXML
     private TabPane tabPane;
 
     @FXML
-    private Button btVolverALibros;
-
-    @FXML
-    private  Button btvolverTablaUserAdmin;
+    private Button volverTodosLibros;
 
     @FXML
     private TextField txfIsbnLibroAdmin;
@@ -338,14 +332,16 @@ public class HelloController implements Initializable {
     private ComboBox<String> cbGeneroLibros;
 
     @FXML
-    private TextField txfBuscaAutoresAdmin;
-
-
-    @FXML
     private ImageView imgLibro;
 
     private String enlaceImg;
 
+
+
+    public static Connection conBD() throws ClassNotFoundException, SQLException {
+        Class.forName("org.mariadb.jdbc.Driver");
+        return DriverManager.getConnection("jdbc:mariadb://localhost:3307/bd_biblio", "root", "DAM2122");
+    }
 
     @FXML
     void CambiaPanel(ActionEvent event) {
@@ -407,54 +403,55 @@ public class HelloController implements Initializable {
         String nombre;
         String apellidos;
         String dni;
-        Date fechaNac;
+        java.sql.Date fechaNac;
         int telefono;
-        Date fechaAlta;
+        java.sql.Date fechaAlta;
         String usuarioProvisional;
         String mail;
 
-            try {
-                nombre = txfNombreUsuario.getText();
-                apellidos = txfApellidoUsuario.getText();
-                dni = txfDniUsuario.getText();
-                fechaNac = Date.valueOf(txfFecNacUsuario.getValue());
-                telefono = Integer.parseInt(txfTelefonoUsuario.getText());
-                usuarioProvisional = creaUsuarios(nombre,apellidos);
-                fechaAlta = Date.valueOf(txfFecAltaUsuario.getValue());
+        try {
+            nombre = txfNombreUsuario.getText();
+            apellidos = txfApellidoUsuario.getText();
+            dni = txfDniUsuario.getText();
+            fechaNac = Date.valueOf(txfFecNacUsuario.getValue());
+            telefono = Integer.parseInt(txfTelefonoUsuario.getText());
+            usuarioProvisional = creaUsuarios(nombre,apellidos);
+            fechaAlta = Date.valueOf(txfFecAltaUsuario.getValue());
 
-                mail = txfEmailUsuario.getText();
+            mail = txfEmailUsuario.getText();
 
-                PreparedStatement encapsulaPSCons = conBD().prepareStatement("INSERT INTO clientes values(null,?,?,?,?,?,?,?,?)");
-                encapsulaPSCons.setString(1,nombre);
-                encapsulaPSCons.setString(2,apellidos);
-                encapsulaPSCons.setString(3,dni);
-                encapsulaPSCons.setDate(4,fechaNac);
-                encapsulaPSCons.setInt(5,telefono);
-                encapsulaPSCons.setDate(6,fechaAlta);
-                encapsulaPSCons.setString(7,usuarioProvisional);
-                encapsulaPSCons.setString(8,mail);
+            PreparedStatement encapsulaPSCons = conBD().prepareStatement("INSERT INTO clientes values(null,?,?,?,?,?,?,?,?)");
+            encapsulaPSCons.setString(1,nombre);
+            encapsulaPSCons.setString(2,apellidos);
+            encapsulaPSCons.setString(3,dni);
+            encapsulaPSCons.setDate(4,fechaNac);
+            encapsulaPSCons.setInt(5,telefono);
+            encapsulaPSCons.setDate(6,fechaAlta);
+            encapsulaPSCons.setString(7,usuarioProvisional);
+            encapsulaPSCons.setString(8,mail);
 
-                //Actualiza
-                encapsulaPSCons.executeUpdate();
-                limpiaDatosUsuario();
+            //Actualiza
+            encapsulaPSCons.executeUpdate();
+            limpiaDatosUsuario();
 
-                //cierra panel
-                pAgregarUsuarioAdmin.setVisible(false);
-                pPrincipalUsuariosAdmin.setVisible(true);
+            //cierra panel
+            pAgregarUsuarioAdmin.setVisible(false);
+            pPrincipalUsuariosAdmin.setVisible(true);
 
-                agregaFilas("clientes",tableUsuariosAdmin);
+            agregaFilas("clientes",tableUsuariosAdmin);
 
 
-                //Cierra las conexiones
-                encapsulaPSCons.close();
-                conBD().close();
 
-                //Crea un nuevo paciente y lo añade a la lista
+            //Cierra las conexiones
+            encapsulaPSCons.close();
+            conBD().close();
 
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            //Crea un nuevo paciente y lo añade a la lista
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+    }
 
     @FXML
     void ModificaUsuario(ActionEvent event) {
@@ -552,9 +549,9 @@ public class HelloController implements Initializable {
             txfTelefonoUsuario.setText("");
             txfFecAltaUsuario.setValue(null);
             txfEmailUsuario.setText("");
-    }
+        }
 
-}
+    }
 
     @FXML
     public void verFichaUsuario(){
@@ -930,9 +927,111 @@ public class HelloController implements Initializable {
 
 
     /**
-     * Gestión
+     * Gestión Reservas
      */
+    @FXML
+    public  int devuelveIDUsuario(){
+        int idUsuario = 0;
+        String nombreUsuario = JOptionPane.showInputDialog("Inserta el nombre de usuario");
+        try {
+            Statement s = conBD().createStatement();
+            ResultSet rs = s.executeQuery("select idCliente from clientes where userBiblio ="+"'"+nombreUsuario+"'");
 
+            if (rs.next()) {
+                idUsuario = rs.getInt(1);
+            }
+
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        System.out.println(idUsuario);
+
+        return idUsuario;
+    }
+
+    public  int devuelveCantidadLibro(Object value){
+        int cantidadLibros = 0;
+
+        try {
+            Statement s = conBD().createStatement();
+            ResultSet rs = s.executeQuery("select cantidadLibros from libros where IdLibro = "+ value);
+
+            if (rs.next()) {
+                cantidadLibros = rs.getInt(1);
+            }
+
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+        System.out.println(cantidadLibros);
+
+        return cantidadLibros;
+    }
+
+    @FXML
+    public void restaCantidadLibros(Object value){
+        int numLibros = devuelveCantidadLibro(value) - 1;
+
+        try {
+            PreparedStatement encapsulaPSCons = conBD().prepareStatement("update libros set cantidadLibros = ? where IdLibro = ?");
+            encapsulaPSCons.setInt(1,numLibros);
+            encapsulaPSCons.setObject(2,value);
+            //Actualiza
+            encapsulaPSCons.executeUpdate();
+
+            //cierra panel
+
+
+            //Cierra las conexiones
+            encapsulaPSCons.close();
+            conBD().close();
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void insertaReserva(ActionEvent event) {
+        int idCliente;
+        java.sql.Date fechaPrestamo;
+        int idLibro;
+        ObservableList<String>data = tableLibrosAdmin.getSelectionModel().getSelectedItem();
+        Object value = null;
+        value = data.get(0);
+        try {
+            fechaPrestamo = new java.sql.Date(Calendar.getInstance().getTime().getTime());
+            idCliente = devuelveIDUsuario();
+
+            PreparedStatement encapsulaPSCons = conBD().prepareStatement("INSERT INTO prestamos values(null,?,?,?)");
+            encapsulaPSCons.setInt(1,idCliente);
+            encapsulaPSCons.setDate(2,fechaPrestamo);
+            encapsulaPSCons.setObject(3,value);
+
+
+            //Actualiza
+            encapsulaPSCons.executeUpdate();
+
+            //cierra panel
+
+
+
+            //Cierra las conexiones
+            encapsulaPSCons.close();
+            conBD().close();
+
+            //Crea un nuevo paciente y lo añade a la lista
+            pDatosLibros.setVisible(false);
+            pPrincipalLibros.setVisible(true);
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        restaCantidadLibros(data);
+    }
 
 
 
@@ -1173,11 +1272,6 @@ public class HelloController implements Initializable {
         }
     }
 
-    private void extracted(ObservableList<ObservableList> data, ResultSet rs) {
-
-    }
-
-
 
     @FXML
     void muestraBoton(MouseEvent event) {
@@ -1232,11 +1326,6 @@ public class HelloController implements Initializable {
     }
 
     public void construyeDatosTablaLibros(String nomTabla, TableView tabla){
-        /**
-         * Construye y muestra por pantalla
-         * en tabla los datos
-         *
-         */
 
         ObservableList<ObservableList> data;
         Connection c ;
@@ -1276,212 +1365,54 @@ public class HelloController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    public void buscarUsuarioAdmin(ActionEvent event) {
-
-        /**
-         * Action Event que filtra una busqueda
-         * para mostrar los datos en la tabla elegidos
-         */
-        ObservableList<ObservableList> data;
-        Connection c ;
-        data = FXCollections.observableArrayList();
-        String buscarLibro = txfBuscarUsuarios.getText();
-        String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
-        Pattern pattern = Pattern.compile(regex);
-        try{
-            c = conBD();
-            String SQL = "SELECT * from clientes WHERE nombre REGEXP '" + regex + "' " ;
-            ResultSet rs = c.createStatement().executeQuery(SQL);
-
-            while(rs.next()){
-                data.clear();
-                ObservableList<String> row = FXCollections.observableArrayList();
-                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
-                    row.add(rs.getString(i));
-                    row.add(rs.getString(i));
-                }
-                data.add(row);
-                System.out.println(data);
-            }
-
-            tableUsuariosAdmin.setItems(data);
-            btvolverTablaUserAdmin.setVisible(true);
-
-
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Error on Building Data");
-        }
-    }
-
-
-    @FXML
-    void buscarLibrosAdmin(ActionEvent event) {
-        /**
-         * Action Event que filtra una busqueda
-         * para mostrar los datos en la tabla elegidos
-         */
-        ObservableList<ObservableList> data;
-        Connection c ;
-        data = FXCollections.observableArrayList();
-        String buscarLibro = txfBuscarLibrosAdmin.getText();
-        String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
-        Pattern pattern = Pattern.compile(regex);
-        try{
-            c = conBD();
-            String SQL = "SELECT * from libros WHERE titulo REGEXP '" + regex + "' " ;
-            ResultSet rs = c.createStatement().executeQuery(SQL);
-
-            while(rs.next()){
-                data.clear();
-                ObservableList<String> row = FXCollections.observableArrayList();
-                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
-                    row.add(rs.getString(i));
-                    row.add(rs.getString(i));
-                }
-                data.add(row);
-            }
-
-            tableLibrosAdmin.setItems(data);
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Error on Building Data");
-        }
-
-    }
-    @FXML
-    void busquedaAutoresAdmin(ActionEvent event) {
-        /**
-         * Action Event que filtra una busqueda
-         * para mostrar los datos en la tabla elegidos
-         */
-        ObservableList<ObservableList> data;
-        Connection c ;
-        data = FXCollections.observableArrayList();
-        String buscarLibro = txfBuscaAutoresAdmin.getText();
-        String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
-        Pattern pattern = Pattern.compile(regex);
-        try{
-            c = conBD();
-            String SQL = "SELECT * from autores WHERE nombre REGEXP '" + regex + "' " ;
-            ResultSet rs = c.createStatement().executeQuery(SQL);
-
-            while(rs.next()){
-                data.clear();
-                ObservableList<String> row = FXCollections.observableArrayList();
-                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
-                    row.add(rs.getString(i));
-                    row.add(rs.getString(i));
-                }
-                data.add(row);
-                System.out.println(data);
-            }
-
-            tableAutores.setItems(data);
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Error on Building Data");
-        }
-    }
-
-    @FXML
-    void volverTodosUserAdmin(ActionEvent event){
-        /**
-         * Action Event que al pulsar el boton volver
-         * vuelva a mostrar todos los datos para reiniciar
-         * la búsqueda
-         */
-        construyeDatos("clientes", tableUsuariosAdmin);
-        btvolverTablaUserAdmin.setVisible(false);
-        txfBuscarUsuarios.setText(" ");
-
-    }
-
-
+    private Label label;
 
     @FXML
     void todosLibros(ActionEvent event) {
-        /**
-         * Action Event que al pulsar el boton volver
-         * vuelva a mostrar todos los datos para reiniciar
-         * la búsqueda
-         */
         imgPane.getChildren().clear();
         insertaImg();
-        btVolverALibros.setVisible(false);
-        txfBuscaLibro.setText("");
+        volverTodosLibros.setVisible(false);
+        tBuscaLibro.setText("");
     }
 
     @FXML
     void volveraBiblio(ActionEvent event) {
-        /**
-         * Action Event que al pulsar el boton volver
-         * vuelva a mostrar todos los datos para reiniciar
-         * la búsqueda
-         */
         pCojaLibro.setVisible(false);
         pPrincipal1.setVisible(true);
     }
 
     @FXML
     void busquedaRegexText(ActionEvent event) {
-        /**
-         * Action Event que al iniciarse haga una
-         * búsqueda por regex para filtrar el texto
-         */
 
         buscarLibros();
-        btVolverALibros.setVisible(true);
-
+        volverTodosLibros.setVisible(true);
     }
 
 
     @FXML
     void veaPerfil(ActionEvent event) {
-        /**
-         * Action Event que al pulsar el boton
-         * vaya al tab seleccionado
-         */
         tabPane.getSelectionModel().select(3);
     }
 
     @FXML
     void veaLibro(ActionEvent event) {
-        /**
-         * Action Event que al pulsar el boton
-         * vaya al tab seleccionado
-         */
         tabPane.getSelectionModel().select(1);
     }
 
     @FXML
     void veaMisLibros(ActionEvent event) {
-        /**
-         * Action Event que al pulsar el boton
-         * vaya al tab seleccionado
-         */
         tabPane.getSelectionModel().select(2);
     }
 
 
-    public static Connection conBD() throws ClassNotFoundException, SQLException {
-        /**
-         * Método para la conexión de la base de datos
-         */
-        Class.forName("org.mariadb.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/bd_biblio", "root", "root");
+    void scrolling() {
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
     }
 
 
-
     void buscarLibros() {
-        /**
-         * Método que busca mediante Regex
-         * los valores de los libros para mostrarlos a través
-         * del Pane
-         */
-        String buscarLibro = txfBuscaLibro.getText();
+        String buscarLibro = tBuscaLibro.getText();
         String regex = "(?i)" + buscarLibro; // (?i) para hacer la busqueda insensible a mayusculas/minusculas
         Pattern pattern = Pattern.compile(regex);
 
@@ -1508,20 +1439,11 @@ public class HelloController implements Initializable {
         }
     }
 
-    void scrolling (){
-        /**
-         * Método que hace que el scrollPane
-         * se mueva al añadir más datos
-         */
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+    void panePerfil (){
+
     }
 
     private Pane getPane(String dis, InputStream fis) {
-        /**
-         * Método que añade imágenes
-         * al panel a través de una consulta externa
-         */
         imgPane.getChildren().clear();
         //Seteando Imagen
         Image image = new Image(fis);
@@ -1554,10 +1476,6 @@ public class HelloController implements Initializable {
     }
 
     void insertaImg() {
-        /**
-         * Método que añade imágenes con consulta
-         * y apoyar al método anterior
-         */
 
         try {
             Statement stmt = conBD().createStatement();
@@ -1577,10 +1495,6 @@ public class HelloController implements Initializable {
 
 
     private Pane getPane2(String dis, InputStream fis) {
-        /**
-         * Método que añade imágenes
-         * al panel a través de una consulta externa
-         */
         System.out.println(dis);
 
         //Seteando Imagen
@@ -1614,10 +1528,6 @@ public class HelloController implements Initializable {
     }
 
     private void muestraDatos(Statement stmt, int idLibro, String dis, Pane pane) {
-        /**
-         * Método que muestra los datos del libro
-         * seleccionado en el panel donde se muestra
-         */
         //Cambiando a panel informacion
         pane.setOnMouseClicked(e -> {
             pCojaLibro.setVisible(true);
@@ -1632,23 +1542,14 @@ public class HelloController implements Initializable {
                     int idautor = st.getInt("idAutor");
                     int idgenero = st.getInt("idGenero");
                     int isbn = st.getInt("isbn");
-                    InputStream fis = st.getBinaryStream("enlaceImg");
+                    Blob enlaceImg = st.getBlob("enlaceImg");
 
-                    txfIdlibroUser.setText(String.valueOf(idlibro));
-                    txfTituloLibroUser.setText(titulo);
-                    txfAutorLibroUser.setText(String.valueOf(idautor));
-                    txfIsbnLibroUser.setText(String.valueOf(isbn));
-                    txfGeneroLibroUser.setText(String.valueOf(idgenero));
-                    txfPaginasLibroUser.setText(String.valueOf(numPag));
-
-                    Image image = new Image(fis);
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(595);
-                    imageView.setFitWidth(489);
-                    imageView.setImage(image);
-
-                    pImagenUser.getChildren().add(imageView);
-
+                    lIdlibro.setText(String.valueOf(idlibro));
+                    lTituloLibro.setText(titulo);
+                    lAutorLibro.setText(String.valueOf(idautor));
+                    lIsbnLibro.setText(String.valueOf(isbn));
+                    lGeneroLibro.setText(String.valueOf(idgenero));
+                    lPaginasLibro.setText(String.valueOf(numPag));
 
                 }
             } catch (SQLException ex) {
@@ -1662,10 +1563,6 @@ public class HelloController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        /**
-         * Método Initialize
-         */
-
         construyeDatos("clientes", tableUsuariosAdmin);
         construyeDatos("autores",tableAutores);
         construyeDatosTablaLibros("libros",tableLibrosAdmin);
@@ -1676,9 +1573,10 @@ public class HelloController implements Initializable {
         datosGeneroComboBox();
         insertaImg();
         scrolling();
+
+
+
+
     }
-
-
-
 }
 
